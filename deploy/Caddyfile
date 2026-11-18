@@ -1,0 +1,9 @@
+wallpaper.example.com {
+    encode zstd gzip
+    reverse_proxy 127.0.0.1:4173 {
+        transport http {
+            read_timeout 180s
+            write_timeout 180s
+        }
+    }
+}

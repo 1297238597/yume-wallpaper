@@ -1,0 +1,28 @@
+[Unit]
+Description=YUME anime wallpaper gallery
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/yume
+Environment=NODE_ENV=production
+Environment=HOST=0.0.0.0
+Environment=PORT=4173
+EnvironmentFile=-/etc/yume.env
+ExecStart=/usr/bin/node server.mjs
+Restart=always
+RestartSec=5
+TimeoutStopSec=15
+
+# 基本安全加固；/opt/yume 只允许写 .cache
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/yume/.cache
+
+[Install]
+WantedBy=multi-user.target

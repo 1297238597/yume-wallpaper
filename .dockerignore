@@ -1,0 +1,13 @@
+node_modules
+.cache
+docs
+.git
+.gitignore
+.tmp-*
+*.log
+README.md
+DEPLOY.md
+render.yaml
+railway.toml
+docker-compose.yml
+deploy

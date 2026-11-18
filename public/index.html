@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="night">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="YUME 梦壁纸 —— 一个收集心动瞬间的二次元手机壁纸画廊。竖屏高清、瀑布流浏览，壁纸来自 Wallhaven 免费开放 API，仅展示 SFW 内容。">
+  <meta name="theme-color" content="#09070e">
+  <meta name="color-scheme" content="dark light">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="YUME 梦壁纸 · 二次元手机壁纸画廊">
+  <meta property="og:description" content="竖屏高清、瀑布流浏览的二次元手机壁纸画廊。壁纸来自 Wallhaven 免费开放 API，仅展示 SFW 内容。">
+  <title>YUME 梦壁纸 · 二次元手机壁纸画廊</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="/styles.css" as="style">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/theme-init.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#gallery">跳到壁纸画廊</a>
+
+  <div class="ambient" aria-hidden="true">
+    <span class="ambient__orb ambient__orb--rose"></span>
+    <span class="ambient__orb ambient__orb--iris"></span>
+    <span class="ambient__orb ambient__orb--mint"></span>
+    <span class="ambient__grid"></span>
+  </div>
+
+  <header class="site-header" id="siteHeader">
+    <div class="nav-shell">
+      <a class="brand" href="/" aria-label="YUME 梦壁纸首页">
+        <span class="brand__mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" role="img">
+            <defs>
+              <linearGradient id="brandGradient" x1="8" y1="5" x2="40" y2="44" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#ffb7d2"/>
+                <stop offset=".52" stop-color="#b79bff"/>
+                <stop offset="1" stop-color="#71e6d4"/>
+              </linearGradient>
+            </defs>
+            <path d="M32.6 7.2c-8.7 1.1-15.4 8.5-15.4 17.5 0 6.2 3.2 11.7 8.1 14.9-1.5.4-3 .6-4.6.6C11.4 40.2 3.8 32.6 3.8 23.3S11.4 6.4 20.7 6.4c4.4 0 8.5 1.7 11.6 4.5l.3-3.7Z" fill="url(#brandGradient)"/>
+            <path d="M34.4 14.6 36 19l4.4 1.6-4.4 1.6-1.6 4.4-1.6-4.4-4.4-1.6 4.4-1.6 1.6-4.4Z" fill="#fff4d8"/>
+            <circle cx="38.5" cy="31.5" r="2.2" fill="#ffb7d2"/>
+          </svg>
+        </span>
+        <span class="brand__words">
+          <span class="brand__latin">YUME</span>
+          <span class="brand__jp">夢壁紙</span>
+        </span>
+      </a>
+
+      <nav class="main-nav" aria-label="主要导航">
+        <button class="main-nav__item is-active" type="button" data-view="discover">
+          <span>发现</span>
+        </button>
+        <button class="main-nav__item" type="button" data-view="favorites">
+          <span>收藏</span>
+          <span class="main-nav__count" id="favCount" hidden>0</span>
+        </button>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="icon-button" type="button" id="searchToggle" aria-label="搜索壁纸" aria-expanded="false" aria-controls="searchPanel">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.2 4.2"/></svg>
+        </button>
+        <button class="icon-button" type="button" id="themeToggle" aria-label="切换为明亮主题">
+          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.2A8.4 8.4 0 0 1 8.8 4a8.2 8.2 0 1 0 11.2 11.2Z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2.4M12 19.6V22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M2 12h2.4M19.6 12H22M4.9 19.1l1.7-1.7M17.4 6.6l1.7-1.7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="search-panel" id="searchPanel">
+      <div class="search-panel__inner">
+        <form class="search-form" id="searchForm" role="search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.2 4.2"/></svg>
+          <label class="sr-only" for="searchInput">搜索壁纸</label>
+          <input id="searchInput" type="search" name="q" placeholder="搜索角色、作品或标签，例如 Hatsune Miku" autocomplete="off" maxlength="80">
+          <button class="search-form__clear" type="button" id="searchClear" aria-label="清空搜索" hidden>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+          </button>
+          <button class="button button--small button--primary" type="submit">搜索</button>
+        </form>
+        <div class="search-suggestions">
+          <span>试试搜</span>
+          <button type="button" data-search="Hatsune Miku">初音未来</button>
+          <button type="button" data-search="Genshin Impact">原神</button>
+          <button type="button" data-search="Blue Archive">蔚蓝档案</button>
+          <button type="button" data-search="cyberpunk">赛博朋克</button>
+          <button type="button" data-search="starry sky">星空</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="hero__copy">
+        <p class="eyebrow reveal">
+          <span class="eyebrow__dot"></span>
+          ANIME WALLPAPER GALLERY
+          <span class="eyebrow__jp">二次元壁纸</span>
+        </p>
+        <h1 class="hero__title reveal" id="heroTitle">
+          把喜欢的<span class="text-gradient">二次元</span><br>
+          装进手机里。
+        </h1>
+        <p class="hero__jp reveal">きらめきを、ポケットに。</p>
+        <p class="hero__lede reveal">
+          从 Wallhaven 开放壁纸库中，挑选每一张值得成为锁屏的心动瞬间。
+          竖屏高清、安静浏览，让每一次点亮屏幕都像翻开一页画集。
+        </p>
+        <div class="hero__actions reveal">
+          <a class="button button--primary button--glow" href="#gallery">
+            <span>开始探索</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M12.5 5.5 19 12l-6.5 6.5"/></svg>
+          </a>
+          <button class="button button--ghost" type="button" id="heroShuffle">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h3.2c5.8 0 5.8 10 11.6 10H21M18 3.5 21.5 7 18 10.5M3 17h3.2c1.9 0 3.2-1.1 4.4-2.5M14.6 9.5C15.7 8.2 16.9 7 18.8 7H21M18 13.5 21.5 17 18 20.5"/></svg>
+            <span>换一批灵感</span>
+          </button>
+        </div>
+        <dl class="hero__stats reveal">
+          <div>
+            <dt>竖屏画作</dt>
+            <dd><span id="statTotal">5,000</span><sup>+</sup></dd>
+          </div>
+          <div>
+            <dt>浏览模式</dt>
+            <dd>SFW</dd>
+          </div>
+          <div>
+            <dt>画质下限</dt>
+            <dd>1080p</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="hero-art reveal" id="heroArt" aria-label="精选壁纸预览">
+        <span class="hero-art__halo"></span>
+        <span class="hero-art__orbit hero-art__orbit--one" aria-hidden="true"></span>
+        <span class="hero-art__orbit hero-art__orbit--two" aria-hidden="true"></span>
+
+        <button class="phone phone--left" type="button" data-hero-slot="1" aria-label="查看左侧精选壁纸">
+          <span class="phone__frame">
+            <span class="phone__screen">
+              <img alt="" loading="eager" decoding="async">
+              <span class="phone__shimmer"></span>
+            </span>
+          </span>
+        </button>
+
+        <button class="phone phone--main" type="button" data-hero-slot="0" aria-label="查看精选壁纸">
+          <span class="phone__frame">
+            <span class="phone__screen">
+              <img alt="" loading="eager" decoding="async">
+              <span class="phone__shimmer"></span>
+              <span class="phone__ui" aria-hidden="true">
+                <span class="phone__status"><span>20:24</span><span class="phone__signal"><i></i><i></i><i></i></span></span>
+                <span class="phone__clock">
+                  <span class="phone__time">20:24</span>
+                  <span class="phone__date">11月18日 · 星期三</span>
+                </span>
+                <span class="phone__caption">
+                  <span class="phone__caption-jp">今日のきらめき</span>
+                  <span class="phone__caption-line"></span>
+                  <span class="phone__caption-id" id="heroMainId">YUME SELECT</span>
+                </span>
+              </span>
+            </span>
+          </span>
+        </button>
+
+        <button class="phone phone--right" type="button" data-hero-slot="2" aria-label="查看右侧精选壁纸">
+          <span class="phone__frame">
+            <span class="phone__screen">
+              <img alt="" loading="eager" decoding="async">
+              <span class="phone__shimmer"></span>
+            </span>
+          </span>
+        </button>
+
+        <span class="float-chip float-chip--quality">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 5 6v5.2c0 4.2 2.8 7.9 7 9.8 4.2-1.9 7-5.6 7-9.8V6l-7-3Z"/><path d="m9.2 12 1.9 1.9 3.8-4"/></svg>
+          <span><b>SFW</b> 安心浏览</span>
+        </span>
+        <span class="float-chip float-chip--size">
+          <span class="float-chip__spark">✦</span>
+          <span><b>9:16</b> 原生竖屏</span>
+        </span>
+        <span class="hero-art__sticker" aria-hidden="true">夢</span>
+      </div>
+    </section>
+
+    <section class="gallery-section" id="gallery" aria-labelledby="galleryTitle">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow"><span class="eyebrow__dot"></span>EXPLORE THE DREAM</p>
+          <h2 id="galleryTitle">今日心动画廊</h2>
+          <p class="section-heading__sub" id="gallerySub">每一张，都值得成为你的下一张锁屏。</p>
+        </div>
+        <div class="source-pill" id="sourcePill">
+          <span class="source-pill__dot"></span>
+          <span class="source-pill__text">Wallhaven API</span>
+          <span class="source-pill__badge">SFW</span>
+        </div>
+      </div>
+
+      <div class="filter-dock" id="filterDock">
+        <div class="mood-chips" id="moodChips" role="group" aria-label="壁纸风格筛选">
+          <button class="chip is-active" type="button" data-mood="all" data-query="">全部</button>
+          <button class="chip" type="button" data-mood="girl" data-query="girl">少女</button>
+          <button class="chip" type="button" data-mood="genshin" data-query="Genshin Impact">原神</button>
+          <button class="chip" type="button" data-mood="bluearchive" data-query="Blue Archive">蔚蓝档案</button>
+          <button class="chip" type="button" data-mood="cyberpunk" data-query="cyberpunk">赛博</button>
+          <button class="chip" type="button" data-mood="kimono" data-query="kimono">和风</button>
+          <button class="chip" type="button" data-mood="starry" data-query="starry sky">星空</button>
+          <button class="chip" type="button" data-mood="cat" data-query="cat girl">猫耳</button>
+          <button class="chip" type="button" data-mood="landscape" data-query="landscape">风景</button>
+        </div>
+        <div class="filter-tools">
+          <label class="sort-control">
+            <span class="sr-only">排序方式</span>
+            <select id="sortSelect" title="选择排序方式">
+              <option value="favorites">推荐</option>
+              <option value="date_added">最新</option>
+              <option value="views">热门</option>
+              <option value="random">随机</option>
+            </select>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg>
+          </label>
+          <button class="shuffle-button" type="button" id="shuffleButton" aria-label="随机换一批" title="随机换一批">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h3.2c5.8 0 5.8 10 11.6 10H21M18 3.5 21.5 7 18 10.5M3 17h3.2c1.9 0 3.2-1.1 4.4-2.5M14.6 9.5C15.7 8.2 16.9 7 18.8 7H21M18 13.5 21.5 17 18 20.5"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="gallery-meta">
+        <p class="result-line" id="resultLine" aria-live="polite">正在收集心动瞬间…</p>
+        <p class="gallery-meta__hint">
+          <span class="live-dot"></span>
+          点击任意壁纸查看大图
+        </p>
+      </div>
+
+      <div class="skeleton-grid" id="skeletonGrid" aria-hidden="true">
+        <span class="skeleton-card" style="height: 300px"></span>
+        <span class="skeleton-card" style="height: 380px"></span>
+        <span class="skeleton-card" style="height: 250px"></span>
+        <span class="skeleton-card" style="height: 340px"></span>
+        <span class="skeleton-card" style="height: 290px"></span>
+        <span class="skeleton-card" style="height: 390px"></span>
+        <span class="skeleton-card" style="height: 260px"></span>
+        <span class="skeleton-card" style="height: 350px"></span>
+        <span class="skeleton-card" style="height: 310px"></span>
+        <span class="skeleton-card" style="height: 280px"></span>
+      </div>
+
+      <div class="waterfall" id="waterfall" aria-live="polite" aria-busy="true"></div>
+
+      <div class="state-panel" id="statePanel" hidden>
+        <span class="state-panel__orb" aria-hidden="true">
+          <svg viewBox="0 0 64 64"><path d="M42 9c-10 1.4-17.6 9.9-17.6 20.1 0 7.1 3.6 13.4 9.2 17.1-1.8.5-3.7.8-5.6.8C16.1 47 7.4 38.3 7.4 27.5S16.1 8 27 8c5.2 0 9.9 2 13.5 5.3L42 9Z"/><path d="m46 21 1.9 5.1L53 28l-5.1 1.9L46 35l-1.9-5.1L39 28l5.1-1.9L46 21Z"/></svg>
+        </span>
+        <h3 id="stateTitle">没有找到这幅梦境</h3>
+        <p id="stateCopy">换个关键词试试，或者回到今日推荐看看。</p>
+        <button class="button button--primary button--small" type="button" id="stateAction">回到今日推荐</button>
+      </div>
+
+      <div class="load-state" id="loadState">
+        <span class="loader" aria-hidden="true"></span>
+        <span id="loadText">正在从 Wallhaven 收集心动瞬间…</span>
+      </div>
+
+      <div class="load-sentinel" id="loadSentinel" aria-hidden="true"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer__main">
+      <div class="footer__brand">
+        <span class="brand__mark brand__mark--footer" aria-hidden="true">
+          <svg viewBox="0 0 48 48"><path d="M32.6 7.2c-8.7 1.1-15.4 8.5-15.4 17.5 0 6.2 3.2 11.7 8.1 14.9-1.5.4-3 .6-4.6.6C11.4 40.2 3.8 32.6 3.8 23.3S11.4 6.4 20.7 6.4c4.4 0 8.5 1.7 11.6 4.5l.3-3.7Z" fill="currentColor"/><path d="M34.4 14.6 36 19l4.4 1.6-4.4 1.6-1.6 4.4-1.6-4.4-4.4-1.6 4.4-1.6 1.6-4.4Z" fill="#ffb7d2"/></svg>
+        </span>
+        <div>
+          <p class="footer__logo">YUME <span>夢壁紙</span></p>
+          <p class="footer__tagline">把心动收藏，让屏幕发光。</p>
+        </div>
+      </div>
+      <div class="footer__links">
+        <a href="https://wallhaven.cc/" target="_blank" rel="noopener noreferrer">Wallhaven</a>
+        <a href="https://wallhaven.cc/help/api" target="_blank" rel="noopener noreferrer">开放 API</a>
+        <a href="https://wallhaven.cc/search?categories=010&purity=100&ratios=9x16" target="_blank" rel="noopener noreferrer">竖屏壁纸源</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© <span id="footerYear">2026</span> YUME · 仅展示 SFW 内容，作品版权归原作者所有。</p>
+      <p class="footer__notice">壁纸来自 Wallhaven 社区 · 点击作品可前往来源支持创作者</p>
+    </div>
+    <span class="footer__kanji" aria-hidden="true">夢</span>
+  </footer>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <div class="lightbox__backdrop" data-close-lightbox></div>
+    <div class="lightbox__panel" role="dialog" aria-modal="true" aria-labelledby="lightboxTitle">
+      <button class="lightbox__close" type="button" id="lightboxClose" aria-label="关闭预览">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 5 14 14M19 5 5 19"/></svg>
+      </button>
+
+      <div class="lightbox__visual" id="lightboxVisual">
+        <span class="lightbox__ambient" id="lightboxAmbient" aria-hidden="true"></span>
+        <span class="lightbox__glow" aria-hidden="true"></span>
+        <div class="device" id="lightboxDevice">
+          <span class="device__screen">
+            <img id="lightboxImage" alt="">
+            <span class="device__shimmer" id="lightboxShimmer"></span>
+          </span>
+          <span class="device__glare" aria-hidden="true"></span>
+        </div>
+        <div class="lightbox__nav">
+          <button class="round-button" type="button" id="lightboxPrev" aria-label="上一张">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 5-7 7 7 7"/></svg>
+          </button>
+          <span class="lightbox__counter" id="lightboxCounter">01 / 24</span>
+          <button class="round-button" type="button" id="lightboxNext" aria-label="下一张">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 5 7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <aside class="lightbox__info">
+        <p class="eyebrow"><span class="eyebrow__dot"></span>WALLPAPER DETAIL</p>
+        <h2 id="lightboxTitle">樱色梦境</h2>
+        <p class="lightbox__sub" id="lightboxSub">Anime Illustration · No.------</p>
+
+        <div class="tag-list" id="lightboxTags">
+          <span class="tag-skeleton"></span>
+          <span class="tag-skeleton"></span>
+          <span class="tag-skeleton"></span>
+        </div>
+
+        <dl class="spec-grid">
+          <div><dt>分辨率</dt><dd id="specResolution">—</dd></div>
+          <div><dt>画面比例</dt><dd id="specRatio">—</dd></div>
+          <div><dt>文件大小</dt><dd id="specSize">—</dd></div>
+          <div><dt>画质</dt><dd id="specQuality">高清</dd></div>
+        </dl>
+
+        <div class="lightbox__stats">
+          <span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="2.8"/></svg>
+            <b id="specViews">—</b> 次浏览
+          </span>
+          <span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10A4.2 4.2 0 0 1 12 7.4 4.2 4.2 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10Z"/></svg>
+            <b id="specFavs">—</b> 人收藏
+          </span>
+        </div>
+
+        <div class="lightbox__actions">
+          <button class="button button--primary button--wide" type="button" id="lightboxDownload">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M6.5 10.5 12 16l5.5-5.5M4 20h16"/></svg>
+            <span>下载原图</span>
+          </button>
+          <button class="button button--ghost button--icon-only" type="button" id="lightboxFavorite" aria-label="收藏这张壁纸">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10A4.2 4.2 0 0 1 12 7.4 4.2 4.2 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10Z"/></svg>
+          </button>
+        </div>
+
+        <a class="source-link" id="lightboxSource" href="#" target="_blank" rel="noopener noreferrer">
+          <span>
+            <small>ORIGINAL SOURCE</small>
+            <b>前往作品来源</b>
+          </span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        </a>
+
+        <p class="lightbox__credit" id="lightboxCredit">作品来自 Wallhaven 社区，版权归原作者所有。</p>
+        <p class="lightbox__tip">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a7 7 0 0 0-4 12.7V19h8v-3.3A7 7 0 0 0 12 3ZM9 22h6"/></svg>
+          手机端下载后，可在相册中直接设为锁屏。
+        </p>
+      </aside>
+    </div>
+  </div>
+
+  <div class="toast-region" id="toastRegion" role="status" aria-live="polite" aria-atomic="false"></div>
+
+  <button class="back-to-top" type="button" id="backToTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></svg>
+  </button>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

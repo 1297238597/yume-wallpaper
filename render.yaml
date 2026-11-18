@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: yume-wallpaper
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
+      - key: WALLHAVEN_BASE
+        value: https://wallhaven.clbug.com/api/v1
+      - key: SEARCH_EXCLUSIONS
+        value: "-suggestive"
+      # 有官方 API Key 时，在 Render 面板中填写；没有可留空
+      - key: WALLHAVEN_API_KEY
+        sync: false

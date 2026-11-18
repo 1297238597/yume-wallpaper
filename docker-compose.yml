@@ -1,0 +1,20 @@
+services:
+  yume:
+    build: .
+    container_name: yume-wallpaper
+    restart: unless-stopped
+    environment:
+      HOST: 0.0.0.0
+      PORT: 4173
+      NODE_ENV: production
+      WALLHAVEN_BASE: https://wallhaven.clbug.com/api/v1
+      SEARCH_EXCLUSIONS: "-suggestive"
+      # WALLHAVEN_API_KEY: your_api_key
+    ports:
+      # 只绑定本机，由 Nginx/Caddy 负责公网 80/443
+      - "127.0.0.1:4173:4173"
+    volumes:
+      - yume-cache:/app/.cache
+
+volumes:
+  yume-cache:

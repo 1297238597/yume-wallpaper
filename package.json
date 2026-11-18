@@ -1,0 +1,19 @@
+{
+  "name": "yume-anime-wallpaper",
+  "version": "1.0.0",
+  "private": true,
+  "description": "YUME 梦壁纸 — 二次元手机壁纸瀑布流网站，壁纸来自 Wallhaven 免费开放 API",
+  "type": "module",
+  "packageManager": "pnpm@12.21.0",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node --watch server.mjs",
+    "check": "node --check server.mjs && node --check public/app.js && node --check public/theme-init.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "sharp": "^0.35.5"
+  }
+}
